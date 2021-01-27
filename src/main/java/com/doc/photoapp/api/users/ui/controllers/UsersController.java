@@ -4,6 +4,7 @@ import com.doc.photoapp.api.users.service.UsersService;
 import com.doc.photoapp.api.users.shared.UserDto;
 import com.doc.photoapp.api.users.ui.model.CreateUserRequestModel;
 import com.doc.photoapp.api.users.ui.model.CreateUserResponseModel;
+import com.doc.photoapp.api.users.ui.model.UserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,12 @@ public class UsersController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
 
+    }
+
+    @GetMapping(value = "/{userId}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<UserResponseModel> getUser(@PathVariable("userId") String userId){
+        UserDto userDto = usersService.getUserByUserId(userId);
+        UserResponseModel returnValue = new ModelMapper().map(userDto, UserResponseModel.class);
+        return ResponseEntity.status(HttpStatus.OK).body(returnValue);
     }
 }
